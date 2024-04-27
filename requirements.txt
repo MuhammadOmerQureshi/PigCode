@@ -1,0 +1,43 @@
+<<<<<<< HEAD
+# Code analysis
+bandit
+flake8
+flake8-docstrings
+flake8-polyfill
+#cohesion
+#metrics.pylint
+pylint
+radon
+
+# Code style
+black
+
+# Documentation
+pdoc3
+sphinx
+sphinx-rtd-theme # for ReadTheDocs local build
+
+# Unit test and coverage
+coverage
+=======
+# Code analysis
+bandit
+flake8
+flake8-docstrings
+flake8-polyfill
+#cohesion
+#metrics.pylint
+pylint
+radon
+
+# Code style
+black
+
+# Documentation
+pdoc3
+sphinx
+sphinx-rtd-theme # for ReadTheDocs local build
+
+# Unit test and coverage
+coverage
+>>>>>>> 22a79a25375393fc814a5a440ef7b9cf9862388f
