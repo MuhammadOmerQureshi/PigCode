@@ -1,0 +1,16 @@
+{
+    "gustav": {
+        "name": "gustav",
+        "best_score": 101,
+        "games_played": 1
+    },
+    "Computer": {
+        "name": "Computer",
+        "best_score": 112,
+        "games_played": 2
+    },
+    "gustav2": {
+        "name": "gustav2",
+        "best_score": 106,
+        "games_played": 1
+    }
