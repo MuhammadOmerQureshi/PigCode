@@ -1,5 +1,6 @@
 from dice_hand import DiceHand
 
+
 class Player:
     def __init__(self, name, intelligence=None):
         self.original_name = name
@@ -17,7 +18,9 @@ class Player:
         if roll == 1:
             print(f"{self.name} rolled a 1. 🎲 No points this turn.")
         else:
-            print(f"{self.name} rolled a {roll}. 🎲 Turn total: {self.dice_hand.turn_score}")
+            print(
+                f"{self.name} rolled a {roll}. 🎲 Turn total: {self.dice_hand.turn_score}"
+            )
 
     def hold(self):
         self.score += self.dice_hand.turn_score
@@ -36,7 +39,7 @@ class Player:
         if self.intelligence:
             return self.intelligence.decide_hold(self.dice_hand.turn_score)
         return False
-    
+
     @property
     def score(self):
         return self._score

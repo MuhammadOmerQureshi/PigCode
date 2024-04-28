@@ -15,7 +15,9 @@ class Histogram:
 
     def update_highscore(self, player):
         name_key = player.original_name
-        player_data = self.highscores.get(name_key, {"name": player.name, "best_score": 0, "games_played": 0})
+        player_data = self.highscores.get(
+            name_key, {"name": player.name, "best_score": 0, "games_played": 0}
+        )
         player_data["best_score"] = max(player_data["best_score"], player.score)
         player_data["games_played"] += 1
         player_data["name"] = player.name
@@ -28,4 +30,6 @@ class Histogram:
 
     def display_highscores(self):
         for record in self.highscores.values():
-            print(f"{record['name']} - Best Score: {record['best_score']}, Games Played: {record['games_played']}")
+            print(
+                f"{record['name']} - Best Score: {record['best_score']}, Games Played: {record['games_played']}"
+            )

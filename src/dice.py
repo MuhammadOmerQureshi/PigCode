@@ -1,5 +1,6 @@
 import random
 
+
 class Dice:
     @staticmethod
     def roll():

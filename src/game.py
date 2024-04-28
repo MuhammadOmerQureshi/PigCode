@@ -32,27 +32,34 @@ class Game:
             else:
                 # Human player logic
                 action = self.get_player_action(player)
-                if action in ['r', 'h', 'c', 'q']:
-                    if action == 'r':
+                if action in ["r", "h", "c", "q"]:
+                    if action == "r":
                         if player.roll_dice() == 1:
                             break
-                    elif action == 'h':
+                    elif action == "h":
                         player.hold()
                         break
-                    elif action == 'c':
+                    elif action == "c":
                         player.cheat()
-                    elif action == 'q':
+                    elif action == "q":
                         return "quit"
                     if player.score >= 100:
                         break
 
     def get_player_action(self, player):
-        valid_actions = {'r', 'h', 'c', 'q'}
+        valid_actions = {"r", "h", "c", "q"}
         while True:
-            action = input(f"{player.name}, roll, hold, or cheat? (r/h/c) or quit game (q): ").lower().strip()
+            action = (
+                input(
+                    f"{player.name}, roll, hold, or cheat? (r/h/c) or quit game (q): "
+                )
+                .lower()
+                .strip()
+            )
             if action in valid_actions:
                 return action
             print("Invalid input, please enter 'r', 'h', 'c', or 'q'.")
+
 
 def setup_game():
     print("Welcome to Dice game")
@@ -70,12 +77,14 @@ def setup_game():
 
     return [player1, player2]
 
+
 def get_int_input(prompt, default):
     try:
         return int(input(prompt))
     except ValueError:
         print(f"Invalid input. Setting to default ({default}).")
         return default
+
 
 def main():
     players = setup_game()
@@ -90,12 +99,13 @@ def main():
             game.high_score.update_highscore(winner)
             game.high_score.histogram.display_highscores()
 
-        if input("Do you want to play again? (yes/no): ").lower().strip() != 'yes':
+        if input("Do you want to play again? (yes/no): ").lower().strip() != "yes":
             print("Thanks for playing! 🖐️")
             break
         else:
             for player in players:
                 player.reset()
+
 
 if __name__ == "__main__":
     main()

@@ -1,5 +1,6 @@
 from dice import Dice
 
+
 class DiceHand:
     def __init__(self):
         self.turn_score = 0
