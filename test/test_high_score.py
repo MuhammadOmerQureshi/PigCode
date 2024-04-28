@@ -2,6 +2,7 @@ import unittest
 from unittest.mock import MagicMock
 from high_score import HighScore
 
+
 class TestHighScore(unittest.TestCase):
     def setUp(self):
         # Create a mock histogram object
@@ -22,5 +23,6 @@ class TestHighScore(unittest.TestCase):
         # Test if the histogram property returns the correct histogram object
         self.assertEqual(self.highscore.histogram, self.mock_histogram)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     unittest.main()

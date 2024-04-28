@@ -1,6 +1,7 @@
 import unittest
 from dice import Dice
 
+
 class TestDice(unittest.TestCase):
     def test_roll(self):
         # Test if roll returns a valid value within the expected range
@@ -14,5 +15,6 @@ class TestDice(unittest.TestCase):
             rolls.add(Dice.roll())
         self.assertTrue(len(rolls) > 1)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     unittest.main()
