@@ -1,202 +1,106 @@
-<<<<<<< HEAD
+# Makefile for the Dice Game project
 
+# Variables
+VENV = venv
+PYTHON = $(VENV)/Scripts/python
+PIP = $(VENV)/Scripts/pip
+PYTEST = $(VENV)/Scripts/pytest
+FLAKE8 = $(VENV)/Scripts/flake8
+PYLINT = $(VENV)/Scripts/pylint
+BLACK = $(VENV)/Scripts/black
+SPHINX_BUILD = $(VENV)/Scripts/sphinx-build
+PYREVERSE = $(VENV)/Scripts/pyreverse
 
-#!/usr/bin/env make
+# Default target
+all: install lint black test coverage doc uml
 
-# Change this to be your variant of the python command
-PYTHON ?= python # python3 py
-
-# Print out colored action message
-MESSAGE = printf "\033[32;01m---> $(1)\033[0m\n"
-
-# To make targets in each directory under the src/
-define FOREACH
-    for DIR in src/*; do \
-        $(MAKE) -C $$DIR $(1); \
-    done
-endef
-
-all:
-
-
-# ---------------------------------------------------------
-# Setup a venv and install packages.
-#
-version:
-	@printf "Currently using executable: $(PYTHON)\n"
-	which $(PYTHON)
-	$(PYTHON) --version
-
-venv:
-	[ -d .venv ] || $(PYTHON) -m venv .venv
-	@printf "Now activate the Python virtual environment.\n"
-	@printf "On Unix and Mac, do:\n"
-	@printf ". .venv/bin/activate\n"
-	@printf "On Windows (bash terminal), do:\n"
-	@printf ". .venv/Scripts/activate\n"
-	@printf "Type 'deactivate' to deactivate.\n"
-
+# Install dependencies
 install:
-	$(PYTHON) -m pip install -r requirements.txt
+	@echo "Installing dependencies..."
+	$(PIP) install -r requirements.txt
 
-installed:
-	$(PYTHON) -m pip list
-
-
-# ---------------------------------------------------------
-# Cleanup generated and installed files.
-#
-clean:
-	rm -f .coverage *.pyc
-	rm -rf __pycache__
-	rm -rf htmlcov
-
-clean-doc:
-	rm -rf doc
-
-clean-src:
-	$(call FOREACH,clean)
-
-clean-all: clean clean-doc clean-src
-	rm -rf .venv
-
-
-# ---------------------------------------------------------
-# Test all the code at once.
-#
-pylint:
-	$(call FOREACH,pylint)
-
+# Run flake8
 flake8:
-	$(call FOREACH,flake8)
+	@echo "Linting code with Flake8..."
+	$(FLAKE8) 
 
-lint: flake8 pylint
+# Run pylint
+pylint:
+	@echo "Linting code with Pylint..."
+	$(PYLINT) 
 
+# Run linters
+lint:
+	@echo "Running linters..."
+	$(FLAKE8) 
+	$(PYLINT) 
+
+# Format code with Black
+black:
+	@echo "Formatting code with Black..."
+	$(BLACK) .
+
+# Run tests
 test:
-	$(call FOREACH,test)
+	@echo "Running tests..."
+	$(PYTEST)
 
-=======
-"""# Compiler settings - Can change based on your preferences and system setup
-CC = g++
-CFLAGS = -I. -Wall
-LDFLAGS =
+# Generate coverage report
+coverage:
+	@echo "Generating coverage report..."
+	$(PYTEST) --cov-report term --cov=dice.py dice_hand.py game.py high_score.py histogram.py intelligence.py
+	player.py test_dice.py test_dice_hand.py test_game.py test_high_score.py test_histogram.py test_intelligence.py 
+	test_player.py
 
-# Project files
-SRC = main.cpp
-OBJ = $(SRC:.cpp=.o)
-EXECUTABLE = main
+# Generate documentation
+doc: pdoc pyreverse
+	@echo "Generating documentation..."
+	$(SPHINX_BUILD) -b html doc/source doc/build dice.py dice_hand.py game.py high_score.py histogram.py intelligence.py
+	player.py test_dice.py test_dice_hand.py test_game.py test_high_score.py test_histogram.py test_intelligence.py 
+	test_player.py
 
-# Test files
-TEST_SRC = test.cpp
-TEST_OBJ = $(TEST_SRC:.cpp=.o)
-TEST_EXECUTABLE = test
-
-all: $(EXECUTABLE)
-
-$(EXECUTABLE): $(OBJ)
-	$(CC) -o $@ $^ $(LDFLAGS)
-
-$(OBJ): $(SRC)
-	$(CC) -c -o $@ $< $(CFLAGS)
-
-# Rule for building test
-test: $(TEST_EXECUTABLE)
-
-$(TEST_EXECUTABLE): $(TEST_OBJ)
-	$(CC) -o $@ $^ $(LDFLAGS)
-
-$(TEST_OBJ): $(TEST_SRC)
-	$(CC) -c -o $@ $< $(CFLAGS)
-
-# Command to run the tests
-runtest: test
-	./$(TEST_EXECUTABLE)
+# Generate UML diagrams
+uml:
+	@echo "Generating UML diagrams..."
+	$(PYREVERSE) -o png -p PigCode dice.py dice_hand.py game.py high_score.py histogram.py intelligence.py player.py 
+	test_dice.py test_dice_hand.py test_game.py test_high_score.py test_histogram.py test_intelligence.py test_player.py
+	mv *.png doc/uml/
 
 # Clean up
 clean:
-	rm -f $(OBJ) $(EXECUTABLE) $(TEST_OBJ) $(TEST_EXECUTABLE)
+	@echo "Cleaning up..."
+	find . -type f -name '*.pyc' -delete
+	find . -type d -name '_pycache_' -delete
+	rm -rf .pytest_cache
+	rm -rf doc/build
+	rm -rf doc/uml/*.png
 
-.PHONY: all clean test runtest
+# Calculate software metrics for your project.
 
+radon-cc:
+	@$(call MESSAGE,$@)
+	radon cc --show-complexity --average pig
 
+radon-mi:
+	@$(call MESSAGE,$@)
+	radon mi --show pig
 
+radon-raw:
+	@$(call MESSAGE,$@)
+	radon raw pig
 
+radon-hal:
+	@$(call MESSAGE,$@)
+	radon hal pig
 
+cohesion:
+	@$(call MESSAGE,$@)
+	cohesion --directory pig
 
+metrics: radon-cc radon-mi radon-raw radon-hal cohesion
 
+bandit:
+	@$(call MESSAGE,$@)
+	bandit --recursive pig
 
-#!/usr/bin/env make
-
-# Change this to be your variant of the python command
-PYTHON ?= python # python3 py
-
-# Print out colored action message
-MESSAGE = printf "\033[32;01m---> $(1)\033[0m\n"
-
-# To make targets in each directory under the src/
-define FOREACH
-    for DIR in src/*; do \
-        $(MAKE) -C $$DIR $(1); \
-    done
-endef
-
-all:
-
-
-# ---------------------------------------------------------
-# Setup a venv and install packages.
-#
-version:
-	@printf "Currently using executable: $(PYTHON)\n"
-	which $(PYTHON)
-	$(PYTHON) --version
-
-venv:
-	[ -d .venv ] || $(PYTHON) -m venv .venv
-	@printf "Now activate the Python virtual environment.\n"
-	@printf "On Unix and Mac, do:\n"
-	@printf ". .venv/bin/activate\n"
-	@printf "On Windows (bash terminal), do:\n"
-	@printf ". .venv/Scripts/activate\n"
-	@printf "Type 'deactivate' to deactivate.\n"
-
-install:
-	$(PYTHON) -m pip install -r requirements.txt
-
-installed:
-	$(PYTHON) -m pip list
-
-
-# ---------------------------------------------------------
-# Cleanup generated and installed files.
-#
-clean:
-	rm -f .coverage *.pyc
-	rm -rf __pycache__
-	rm -rf htmlcov
-
-clean-doc:
-	rm -rf doc
-
-clean-src:
-	$(call FOREACH,clean)
-
-clean-all: clean clean-doc clean-src
-	rm -rf .venv
-
-
-# ---------------------------------------------------------
-# Test all the code at once.
-#
-pylint:
-	$(call FOREACH,pylint)
-
-flake8:
-	$(call FOREACH,flake8)
-
-lint: flake8 pylint
-
-test:
-	$(call FOREACH,test)
-
->>>>>>> 22a79a25375393fc814a5a440ef7b9cf9862388f
+.PHONY: all install lint black test coverage doc uml clean flake8 pylint
